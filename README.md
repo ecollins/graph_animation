@@ -1,40 +1,40 @@
-# Unit Circle → Sine Wave (Offline)
+# Graph Animation — Unit Circle → Waves
 
-Fully self-contained, offline-capable visualization. No internet, no build step, no dependencies.
-
-## Contents
-- `index.html` — single-file app (HTML+CSS+JS, Canvas). ~58KB.
+Fully self-contained, offline-capable visualization. Works on GitHub Pages, local file open, or as email zip.
 
 ## Features
-- Unit circle (black, turns light gray when sine off) with rotating radius (light blue) and dark blue dot
-- Sine wave 0 → 6π (3 cycles) synced to dot height
-- Rate slider: 0 → 1 Hz (0 = frozen, 0.5 Hz = 2s period default)
-- Buttons (stacked vertically):
-  - **Sine On/Off** — hides wave, grays circle (circle always visible)
-  - **Square** — inscribed square (green) + dark green intersection dot + green clipped wave, with rotation slider -180° → +180° (clockwise right)
-  - **Triangle** — inscribed equilateral triangle (orange) + dark orange dot + orange wave, with rotation slider
-- Play/Pause, dark/light mode toggle (hamburger menu), Print/Save as PDF
+- **Unit circle** (black, turns light gray when sine off) with rotating radius (light blue) and dark blue dot
+- **Waves 0 → 6π** (3 cycles) synced to dot height, scrolling procedurally
+- **Rate slider**: 0 → 1 Hz (0 = frozen, 0.5 Hz = 2s period default), 220px long for easy control, double-click to reset
+- **Controls stacked vertically**:
+  - **Sine On/Off** — hides blue sine wave, grays circle (circle always visible)
+  - **Square** — axis-aligned inscribed square (green) + green intersection dot + green clipped wave, rotation slider -180°→+180° (clockwise right, 160px long)
+  - **Triangle** — equilateral triangle (orange) + orange dot + wave, rotation slider
+  - **Square Wave** (purple) — `y = A·sign(sinθ)`, shape = two horizontal lines `y=±A`, dot jumps top/bottom
+  - **Sawtooth** (red) — `y = A·(θ mod 2π / π -1)`, diagonal hint shape
+  - **Ellipse** (teal) — inscribed ellipse `a=R`, `b=R·√(1-e²)` with sliders for **eccentricity** `0→0.95` and **rotation** `-180°→+180°`, intersection `t = 1/√(cos²(θ-φ)/a² + sin²(θ-φ)/b²)`
 
-## How to run
-Just open `index.html` in any modern browser:
+All sliders are longer (rate 220px, rotation/eccentricity 160px) for easier control. Double-click any slider control to reset.
+
+## Run locally
 ```bash
 open index.html
-# or double-click in Finder
 ```
 
 ## GitHub Pages
-1. Create repo, push this folder's contents to `main`
-2. Settings → Pages → Deploy from branch → `main` / root
-3. `index.html` will be served at `https://<user>.github.io/<repo>/`
-
-## Email / Zip
-Zip the folder:
+Push `index.html` to repo root:
 ```bash
-zip -r unit-circle-offline.zip unit-circle-offline
+cd graph_animation
+git add index.html README.md
+git commit -m "Update viz"
+git push
 ```
-Send the zip — recipient just unzips and opens `index.html`. No install needed.
+Enable Pages: Settings → Pages → Deploy from branch → `main` / root.
 
-## Offline note
-This build has **no CDN**: Google Fonts replaced by system fonts (`system-ui`, `ui-monospace`), `html2canvas` removed (Save as Image falls back to Print). Works air-gapped.
+## Offline / Zip
+No CDN: system fonts only, `html2canvas` removed. Zip folder and email:
+```bash
+zip -r graph_animation.zip graph_animation
+```
 
-Generated 2026-07-14
+Generated 2026-07-15 — offline build, no external deps.

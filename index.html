@@ -323,7 +323,7 @@ h1 span{
 .slider-control input[type="range"]{
   -webkit-appearance:none;
   appearance:none;
-  width:132px;
+  width:220px;
   height:4px;
   border-radius:999px;
   background: linear-gradient(to right, var(--accent) 0%, var(--accent) var(--pct,50%), var(--bg-2) var(--pct,50%), var(--bg-2) 100%);
@@ -434,6 +434,13 @@ body.dark-mode button.triangle-toggle.active{
 }
 button.triangle-toggle svg{width:12px;height:12px}
 
+#squareWaveBtn.active{ background:#7c3aed; border-color:#7c3aed; color:#f5f3ff; box-shadow:0 4px 14px rgba(124,58,237,0.28); }
+body.dark-mode #squareWaveBtn.active{ background:#8b5cf6; border-color:#8b5cf6; }
+#sawtoothBtn.active{ background:#dc2626; border-color:#dc2626; color:#fef2f2; box-shadow:0 4px 14px rgba(220,38,38,0.28); }
+body.dark-mode #sawtoothBtn.active{ background:#ef4444; border-color:#ef4444; }
+#ellipseBtn.active{ background:#0d9488; border-color:#0d9488; color:#f0fdfa; box-shadow:0 4px 14px rgba(13,148,136,0.28); }
+body.dark-mode #ellipseBtn.active{ background:#14b8a6; border-color:#14b8a6; }
+
 button.sine-toggle{
   appearance:none;
   border:1px solid var(--border);
@@ -471,13 +478,13 @@ button.sine-toggle svg{width:12px;height:12px}
   flex-direction:column;
   gap:8px;
   align-items:stretch;
-  min-width:160px;
+  min-width:220px;
 }
 .rotation-slider{
   display:flex;
   align-items:center;
-  gap:8px;
-  padding:7px 12px;
+  gap:10px;
+  padding:8px 14px;
   border-radius:999px;
   background: var(--surface);
   border:1px solid var(--border);
@@ -500,8 +507,8 @@ button.sine-toggle svg{width:12px;height:12px}
 .rotation-slider input[type="range"]{
   -webkit-appearance:none;
   appearance:none;
-  width:88px;
-  height:3px;
+  width:160px;
+  height:4px;
   border-radius:999px;
   background: linear-gradient(to right, var(--border-strong) 0%, var(--border-strong) 50%, var(--accent) 50%, var(--border-strong) 100%);
   outline:none;
@@ -781,6 +788,28 @@ footer a:hover{color:var(--accent)}
           <input id="triangleRotateSlider" type="range" min="-180" max="180" step="1" value="0" aria-label="Triangle rotation">
           <span class="rot-val" id="triangleRotateVal">0°</span>
         </div>
+        <button class="square-toggle" id="squareWaveBtn" aria-pressed="false" title="Toggle square wave" style="border-color: rgba(124,58,237,0.35)">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 11 V3 H8 V11 H14 V3" stroke-linecap="square"/></svg>
+          <span id="squareWaveLabel">Square Wave</span>
+        </button>
+        <button class="triangle-toggle" id="sawtoothBtn" aria-pressed="false" title="Toggle sawtooth wave" style="border-color: rgba(220,38,38,0.35)">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 11 L8 3 L8 11 L14 3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span id="sawtoothLabel">Sawtooth</span>
+        </button>
+        <button class="sine-toggle" id="ellipseBtn" aria-pressed="false" title="Toggle inscribed ellipse" style="border-color: rgba(13,148,136,0.35)">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><ellipse cx="8" cy="8" rx="5.5" ry="3.2"/><circle cx="8" cy="8" r="0.9" fill="currentColor" stroke="none"/></svg>
+          <span id="ellipseLabel">Ellipse</span>
+        </button>
+        <div class="rotation-slider" id="ellipseEccControl" style="display:none; border-color: rgba(13,148,136,0.22)">
+          <label for="ellipseEccSlider">Eccentricity</label>
+          <input id="ellipseEccSlider" type="range" min="0" max="0.95" step="0.01" value="0.75" aria-label="Ellipse eccentricity">
+          <span class="rot-val" id="ellipseEccVal">0.75</span>
+        </div>
+        <div class="rotation-slider" id="ellipseRotateControl" style="display:none; border-color: rgba(13,148,136,0.22)">
+          <label for="ellipseRotateSlider">↻ Ellipse</label>
+          <input id="ellipseRotateSlider" type="range" min="-180" max="180" step="1" value="0" aria-label="Ellipse rotation">
+          <span class="rot-val" id="ellipseRotateVal">0°</span>
+        </div>
       </div>
       <div class="pill"><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px rgba(34,197,94,0.6)"></span> Live sync</span></div>
     </div>
@@ -798,6 +827,9 @@ footer a:hover{color:var(--accent)}
           <div class="legend-item" id="legendGreen" style="display:none"><span class="dot-swatch" style="background:#166534;box-shadow:0 0 0 2px var(--surface), 0 0 8px rgba(22,101,52,0.45)"></span> Green = square ∩ radius</div>
           <div class="legend-item" id="legendTriangle" style="display:none"><span class="line-swatch" style="background:#c2410c"></span> Triangle — orange</div>
           <div class="legend-item" id="legendOrange" style="display:none"><span class="dot-swatch" style="background:#9a3412;box-shadow:0 0 0 2px var(--surface), 0 0 8px rgba(154,52,18,0.35)"></span> Orange = triangle ∩ radius</div>
+          <div class="legend-item" id="legendSquareWave" style="display:none"><span class="line-swatch" style="background:#7c3aed"></span> Square wave — purple</div>
+          <div class="legend-item" id="legendSawtooth" style="display:none"><span class="line-swatch" style="background:#dc2626"></span> Sawtooth — red</div>
+          <div class="legend-item" id="legendEllipse" style="display:none"><span class="line-swatch" style="background:#0d9488"></span> Ellipse — teal</div>
         </div>
         <div class="legend-group">
           <div class="legend-item" style="opacity:0.9">θ measured from +x axis · CCW positive · 0→6π</div>
@@ -836,340 +868,173 @@ footer a:hover{color:var(--accent)}
 </div>
 
 <script>
-// INFRA JS helpers will be injected below; animation code here
+// Offline build - no CDN
 (function(){
   const canvas = document.getElementById('c');
   const ctx = canvas.getContext('2d');
   const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
 
-  let W = 1120, H = 460;
-  let circleX, circleY, R, waveX, waveY, waveW;
-
+  let W=1120,H=460,circleX,circleY,R,waveX,waveY,waveW;
   function layout(){
-    const rect = canvas.parentElement.getBoundingClientRect();
-    W = Math.round(rect.width);
-    H = Math.round(rect.height);
-    canvas.width = W * dpr;
-    canvas.height = H * dpr;
-    canvas.style.width = W+'px';
-    canvas.style.height = H+'px';
+    const rect=canvas.parentElement.getBoundingClientRect();
+    W=Math.round(rect.width); H=Math.round(rect.height);
+    canvas.width=W*dpr; canvas.height=H*dpr;
+    canvas.style.width=W+'px'; canvas.style.height=H+'px';
     ctx.setTransform(dpr,0,0,dpr,0,0);
-    if(W < 720){
-      R = Math.min(110, W*0.32);
-      circleX = W/2;
-      circleY = R + 54;
-      waveX = 56;
-      waveY = circleY + R + 66;
-      waveW = W - 72;
-    } else {
-      R = Math.min(132, Math.min(W*0.14, H*0.32));
-      circleX = Math.round(W*0.22);
-      circleY = Math.round(H*0.5);
-      waveX = Math.round(W*0.46);
-      waveY = circleY;
-      waveW = W - waveX - 28;
-    }
+    if(W<720){ R=Math.min(110,W*0.32); circleX=W/2; circleY=R+54; waveX=56; waveY=circleY+R+66; waveW=W-72; }
+    else { R=Math.min(132,Math.min(W*0.14,H*0.32)); circleX=Math.round(W*0.22); circleY=Math.round(H*0.5); waveX=Math.round(W*0.46); waveY=circleY; waveW=W-waveX-28; }
   }
-  layout();
-  window.addEventListener('resize', layout);
+  layout(); window.addEventListener('resize', layout);
 
-  const MIN_HZ = 0, MAX_HZ = 1, DEFAULT_HZ = 0.5;
-  let frequency = DEFAULT_HZ;
-  let running = true;
-  let angle = 0;
-  let lastFrameTime = performance.now();
+  const MIN_HZ=0, MAX_HZ=1, DEFAULT_HZ=0.5;
+  let frequency=DEFAULT_HZ, running=true, angle=0, lastFrameTime=performance.now();
+  let showSine=true, showSquare=false, showTriangle=false, showSquareWave=false, showSawtooth=false, showEllipse=false;
+  let squareRotDeg=0, triangleRotDeg=0, ellipseRotDeg=0, ellipseEcc=0.75;
+  const TOTAL_ANGLE=6*Math.PI;
 
-  let showSine = true;
-  let showSquare = false;
-  let showTriangle = false;
-  let squareRotDeg = 0;
-  let triangleRotDeg = 0;
-
-  const TOTAL_ANGLE = 6*Math.PI;
-
-  const playBtn = document.getElementById('playBtn');
-  const playLabel = document.getElementById('playLabel');
-  const iconPlay = document.getElementById('iconPlay');
-  const iconPause = document.getElementById('iconPause');
-  const speedSlider = document.getElementById('speedSlider');
-  const speedVal = document.getElementById('speedVal');
-  const periodVal = document.getElementById('periodVal');
-  const speedControl = document.getElementById('speedControl');
-
-  const sineToggleBtn = document.getElementById('sineToggleBtn');
-  const sineLabel = document.getElementById('sineLabel');
-  const legendCircle = document.getElementById('legendCircle');
-  const legendSine = document.getElementById('legendSine');
-
-  const squareBtn = document.getElementById('squareBtn');
-  const squareLabel = document.getElementById('squareLabel');
-  const legendSquare = document.getElementById('legendSquare');
-  const legendGreen = document.getElementById('legendGreen');
-  const squareRotateControl = document.getElementById('squareRotateControl');
-  const squareRotateSlider = document.getElementById('squareRotateSlider');
-  const squareRotateVal = document.getElementById('squareRotateVal');
-
-  const triangleBtn = document.getElementById('triangleBtn');
-  const triangleLabel = document.getElementById('triangleLabel');
-  const legendTriangle = document.getElementById('legendTriangle');
-  const legendOrange = document.getElementById('legendOrange');
-  const triangleRotateControl = document.getElementById('triangleRotateControl');
-  const triangleRotateSlider = document.getElementById('triangleRotateSlider');
-  const triangleRotateVal = document.getElementById('triangleRotateVal');
+  // UI refs
+  const playBtn=document.getElementById('playBtn'), playLabel=document.getElementById('playLabel'), iconPlay=document.getElementById('iconPlay'), iconPause=document.getElementById('iconPause');
+  const speedSlider=document.getElementById('speedSlider'), speedVal=document.getElementById('speedVal'), periodVal=document.getElementById('periodVal'), speedControl=document.getElementById('speedControl');
+  const sineToggleBtn=document.getElementById('sineToggleBtn'), sineLabel=document.getElementById('sineLabel'), legendCircle=document.getElementById('legendCircle'), legendSine=document.getElementById('legendSine');
+  const squareBtn=document.getElementById('squareBtn'), squareLabel=document.getElementById('squareLabel'), legendSquare=document.getElementById('legendSquare'), legendGreen=document.getElementById('legendGreen'), squareRotateControl=document.getElementById('squareRotateControl'), squareRotateSlider=document.getElementById('squareRotateSlider'), squareRotateVal=document.getElementById('squareRotateVal');
+  const triangleBtn=document.getElementById('triangleBtn'), triangleLabel=document.getElementById('triangleLabel'), legendTriangle=document.getElementById('legendTriangle'), legendOrange=document.getElementById('legendOrange'), triangleRotateControl=document.getElementById('triangleRotateControl'), triangleRotateSlider=document.getElementById('triangleRotateSlider'), triangleRotateVal=document.getElementById('triangleRotateVal');
+  const squareWaveBtn=document.getElementById('squareWaveBtn'), squareWaveLabel=document.getElementById('squareWaveLabel'), legendSquareWave=document.getElementById('legendSquareWave');
+  const sawtoothBtn=document.getElementById('sawtoothBtn'), sawtoothLabel=document.getElementById('sawtoothLabel'), legendSawtooth=document.getElementById('legendSawtooth');
+  const ellipseBtn=document.getElementById('ellipseBtn'), ellipseLabel=document.getElementById('ellipseLabel'), legendEllipse=document.getElementById('legendEllipse'), ellipseEccControl=document.getElementById('ellipseEccControl'), ellipseEccSlider=document.getElementById('ellipseEccSlider'), ellipseEccVal=document.getElementById('ellipseEccVal'), ellipseRotateControl=document.getElementById('ellipseRotateControl'), ellipseRotateSlider=document.getElementById('ellipseRotateSlider'), ellipseRotateVal=document.getElementById('ellipseRotateVal');
 
   function formatHz(hz){ return hz.toFixed(2)+' Hz'; }
   function formatPeriod(hz){ return hz<=1e-9 ? '∞' : (1/hz).toFixed(2)+'s'; }
-  function updateSpeedUI(){
-    const pct = MAX_HZ>MIN_HZ ? ((frequency-MIN_HZ)/(MAX_HZ-MIN_HZ))*100 : 0;
-    speedSlider.style.setProperty('--pct', pct+'%');
-    speedVal.textContent = formatHz(frequency);
-    periodVal.textContent = formatPeriod(frequency);
-  }
-  function setFrequency(hz){ frequency = Math.max(MIN_HZ, Math.min(MAX_HZ, hz)); updateSpeedUI(); }
-  speedSlider.addEventListener('input', e=> setFrequency(parseFloat(e.target.value)));
-  speedControl.addEventListener('dblclick', ()=>{ speedSlider.value=DEFAULT_HZ; setFrequency(DEFAULT_HZ); });
+  function updateSpeedUI(){ const pct=MAX_HZ>MIN_HZ?((frequency-MIN_HZ)/(MAX_HZ-MIN_HZ))*100:0; speedSlider.style.setProperty('--pct',pct+'%'); speedVal.textContent=formatHz(frequency); periodVal.textContent=formatPeriod(frequency); }
+  function setFrequency(hz){ frequency=Math.max(MIN_HZ,Math.min(MAX_HZ,hz)); updateSpeedUI(); }
+  speedSlider.addEventListener('input',e=>setFrequency(parseFloat(e.target.value)));
+  speedControl.addEventListener('dblclick',()=>{ speedSlider.value=DEFAULT_HZ; setFrequency(DEFAULT_HZ); });
   updateSpeedUI();
 
-  playBtn.addEventListener('click', ()=>{
-    running = !running;
-    if(running){ lastFrameTime = performance.now(); playLabel.textContent='Pause'; iconPlay.style.display='none'; iconPause.style.display='block'; requestAnimationFrame(loop); }
-    else { playLabel.textContent='Play'; iconPlay.style.display='block'; iconPause.style.display='none'; }
-  });
+  playBtn.addEventListener('click',()=>{ running=!running; if(running){ lastFrameTime=performance.now(); playLabel.textContent='Pause'; iconPlay.style.display='none'; iconPause.style.display='block'; requestAnimationFrame(loop);} else { playLabel.textContent='Play'; iconPlay.style.display='block'; iconPause.style.display='none'; } });
 
-  sineToggleBtn.addEventListener('click', ()=>{
-    showSine = !showSine;
-    sineToggleBtn.classList.toggle('active', showSine);
-    sineToggleBtn.setAttribute('aria-pressed', showSine?'true':'false');
-    sineLabel.textContent = showSine ? 'Sine On' : 'Sine Off';
-    if(legendSine) legendSine.style.display = showSine ? 'inline-flex' : 'none';
-    if(legendCircle) legendCircle.innerHTML = showSine ? '<span class="circle-swatch"></span> Unit circle — black' : '<span class="circle-swatch" style="border-color:#cbd5e1"></span> Unit circle — light gray (sine off)';
-  });
-
-  squareBtn.addEventListener('click', ()=>{
-    showSquare = !showSquare;
-    squareBtn.classList.toggle('active', showSquare);
-    squareBtn.setAttribute('aria-pressed', showSquare?'true':'false');
-    squareLabel.textContent = showSquare ? 'Hide Square' : 'Square';
-    if(legendSquare) legendSquare.style.display = showSquare ? 'inline-flex' : 'none';
-    if(legendGreen) legendGreen.style.display = showSquare ? 'inline-flex' : 'none';
-    if(squareRotateControl) squareRotateControl.style.display = showSquare ? 'flex' : 'none';
-  });
-  triangleBtn.addEventListener('click', ()=>{
-    showTriangle = !showTriangle;
-    triangleBtn.classList.toggle('active', showTriangle);
-    triangleBtn.setAttribute('aria-pressed', showTriangle?'true':'false');
-    triangleLabel.textContent = showTriangle ? 'Hide Tri' : 'Triangle';
-    if(legendTriangle) legendTriangle.style.display = showTriangle ? 'inline-flex' : 'none';
-    if(legendOrange) legendOrange.style.display = showTriangle ? 'inline-flex' : 'none';
-    if(triangleRotateControl) triangleRotateControl.style.display = showTriangle ? 'flex' : 'none';
-  });
+  sineToggleBtn.addEventListener('click',()=>{ showSine=!showSine; sineToggleBtn.classList.toggle('active',showSine); sineToggleBtn.setAttribute('aria-pressed',showSine?'true':'false'); sineLabel.textContent=showSine?'Sine On':'Sine Off'; if(legendSine) legendSine.style.display=showSine?'inline-flex':'none'; if(legendCircle) legendCircle.innerHTML=showSine?'<span class="circle-swatch"></span> Unit circle — black':'<span class="circle-swatch" style="border-color:#cbd5e1"></span> Unit circle — light gray (sine off)'; });
+  squareBtn.addEventListener('click',()=>{ showSquare=!showSquare; squareBtn.classList.toggle('active',showSquare); squareBtn.setAttribute('aria-pressed',showSquare?'true':'false'); squareLabel.textContent=showSquare?'Hide Square':'Square'; if(legendSquare) legendSquare.style.display=showSquare?'inline-flex':'none'; if(legendGreen) legendGreen.style.display=showSquare?'inline-flex':'none'; if(squareRotateControl) squareRotateControl.style.display=showSquare?'flex':'none'; });
+  triangleBtn.addEventListener('click',()=>{ showTriangle=!showTriangle; triangleBtn.classList.toggle('active',showTriangle); triangleBtn.setAttribute('aria-pressed',showTriangle?'true':'false'); triangleLabel.textContent=showTriangle?'Hide Tri':'Triangle'; if(legendTriangle) legendTriangle.style.display=showTriangle?'inline-flex':'none'; if(legendOrange) legendOrange.style.display=showTriangle?'inline-flex':'none'; if(triangleRotateControl) triangleRotateControl.style.display=showTriangle?'flex':'none'; });
+  squareWaveBtn.addEventListener('click',()=>{ showSquareWave=!showSquareWave; squareWaveBtn.classList.toggle('active',showSquareWave); squareWaveBtn.setAttribute('aria-pressed',showSquareWave?'true':'false'); squareWaveLabel.textContent=showSquareWave?'Hide SqW':'Square Wave'; if(legendSquareWave) legendSquareWave.style.display=showSquareWave?'inline-flex':'none'; });
+  sawtoothBtn.addEventListener('click',()=>{ showSawtooth=!showSawtooth; sawtoothBtn.classList.toggle('active',showSawtooth); sawtoothBtn.setAttribute('aria-pressed',showSawtooth?'true':'false'); sawtoothLabel.textContent=showSawtooth?'Hide Saw':'Sawtooth'; if(legendSawtooth) legendSawtooth.style.display=showSawtooth?'inline-flex':'none'; });
+  ellipseBtn.addEventListener('click',()=>{ showEllipse=!showEllipse; ellipseBtn.classList.toggle('active',showEllipse); ellipseBtn.setAttribute('aria-pressed',showEllipse?'true':'false'); ellipseLabel.textContent=showEllipse?'Hide Ellipse':'Ellipse'; if(legendEllipse) legendEllipse.style.display=showEllipse?'inline-flex':'none'; if(ellipseEccControl) ellipseEccControl.style.display=showEllipse?'flex':'none'; if(ellipseRotateControl) ellipseRotateControl.style.display=showEllipse?'flex':'none'; });
 
   function updateRotateUI(){
-    if(squareRotateVal) squareRotateVal.textContent = (squareRotDeg>0?'+':'')+Math.round(squareRotDeg)+'°';
-    if(triangleRotateVal) triangleRotateVal.textContent = (triangleRotDeg>0?'+':'')+Math.round(triangleRotDeg)+'°';
+    if(squareRotateVal) squareRotateVal.textContent=(squareRotDeg>0?'+':'')+Math.round(squareRotDeg)+'°';
+    if(triangleRotateVal) triangleRotateVal.textContent=(triangleRotDeg>0?'+':'')+Math.round(triangleRotDeg)+'°';
+    if(ellipseRotateVal) ellipseRotateVal.textContent=(ellipseRotDeg>0?'+':'')+Math.round(ellipseRotDeg)+'°';
+    if(ellipseEccVal) ellipseEccVal.textContent=ellipseEcc.toFixed(2);
   }
-  squareRotateSlider.addEventListener('input', e=>{
-    squareRotDeg = parseFloat(e.target.value);
-    updateRotateUI();
-  });
-  triangleRotateSlider.addEventListener('input', e=>{
-    triangleRotDeg = parseFloat(e.target.value);
-    updateRotateUI();
-  });
-  // double-click to reset rotation
-  if(squareRotateControl) squareRotateControl.addEventListener('dblclick', ()=>{ squareRotDeg=0; squareRotateSlider.value=0; updateRotateUI(); });
-  if(triangleRotateControl) triangleRotateControl.addEventListener('dblclick', ()=>{ triangleRotDeg=0; triangleRotateSlider.value=0; updateRotateUI(); });
+  squareRotateSlider.addEventListener('input',e=>{ squareRotDeg=parseFloat(e.target.value); updateRotateUI(); });
+  triangleRotateSlider.addEventListener('input',e=>{ triangleRotDeg=parseFloat(e.target.value); updateRotateUI(); });
+  ellipseRotateSlider.addEventListener('input',e=>{ ellipseRotDeg=parseFloat(e.target.value); updateRotateUI(); });
+  ellipseEccSlider.addEventListener('input',e=>{ ellipseEcc=parseFloat(e.target.value); updateRotateUI(); });
+  if(squareRotateControl) squareRotateControl.addEventListener('dblclick',()=>{ squareRotDeg=0; squareRotateSlider.value=0; updateRotateUI(); });
+  if(triangleRotateControl) triangleRotateControl.addEventListener('dblclick',()=>{ triangleRotDeg=0; triangleRotateSlider.value=0; updateRotateUI(); });
+  if(ellipseRotateControl) ellipseRotateControl.addEventListener('dblclick',()=>{ ellipseRotDeg=0; ellipseRotateSlider.value=0; updateRotateUI(); });
+  if(ellipseEccControl) ellipseEccControl.addEventListener('dblclick',()=>{ ellipseEcc=0.75; ellipseEccSlider.value=0.75; updateRotateUI(); });
   updateRotateUI();
 
   function degToRad(d){ return d*Math.PI/180; }
-  // slider positive = clockwise, so math CCW angle = -deg
-  function rotToMathRad(deg){ return -degToRad(deg); }
+  function rotToMathRad(deg){ return -degToRad(deg); } // slider + = clockwise
+  function rotatePointMath(px,py,rad){ const c=Math.cos(rad), s=Math.sin(rad); return {x:px*c - py*s, y:px*s + py*c}; }
+  function getSquareVerticesMath(rotDeg){ const S=R/Math.SQRT2; const base=[{x:S,y:S},{x:-S,y:S},{x:-S,y:-S},{x:S,y:-S}]; const phi=rotToMathRad(rotDeg); return base.map(p=>rotatePointMath(p.x,p.y,phi)); }
+  function getTriangleVerticesMath(rotDeg){ const sqrt3=Math.sqrt(3); const base=[{x:0,y:R},{x:-sqrt3/2*R,y:-0.5*R},{x:sqrt3/2*R,y:-0.5*R}]; const phi=rotToMathRad(rotDeg); return base.map(p=>rotatePointMath(p.x,p.y,phi)); }
+  function getEllipseAxes(){ const a=R; const b=R*Math.sqrt(Math.max(0.01,1-ellipseEcc*ellipseEcc)); return {a,b}; }
 
-  function rotatePointMath(px, py, rad){
-    const c = Math.cos(rad), s = Math.sin(rad);
-    return { x: px*c - py*s, y: px*s + py*c };
+  function rayPolygonIntersectionT(dirX,dirY,verts){
+    let best=Infinity; const n=verts.length;
+    for(let i=0;i<n;i++){ const a=verts[i], b=verts[(i+1)%n]; const ax=a.x, ay=a.y, ex=b.x-ax, ey=b.y-ay; const D=ex*dirY - dirX*ey; if(Math.abs(D)<1e-9) continue; const Dt=ex*ay - ax*ey; const Du=dirX*ay - ax*dirY; const t=Dt/D, u=Du/D; if(t>1e-6 && u>=-1e-6 && u<=1+1e-6 && t<best) best=t; }
+    return isFinite(best)?best:R;
   }
+  function squareT(cosA,sinA,rot){ return rayPolygonIntersectionT(cosA,sinA,getSquareVerticesMath(rot)); }
+  function triangleT(cosA,sinA,rot){ return rayPolygonIntersectionT(cosA,sinA,getTriangleVerticesMath(rot)); }
+  function ellipseT(cosA,sinA,rot,ecc){
+    const {a,b}=(()=>{ const aa=R; const bb=R*Math.sqrt(Math.max(0.01,1-ecc*ecc)); return {a:aa,b:bb}; })();
+    const phi=rotToMathRad(rot);
+    // rotate direction into ellipse local frame: theta' = theta - phi
+    // equivalent to rotate dir by -phi
+    const dirLocal=rotatePointMath(cosA,sinA,-phi);
+    const ca=dirLocal.x, sa=dirLocal.y;
+    const denom = (ca*ca)/(a*a) + (sa*sa)/(b*b);
+    if(denom<=1e-12) return R;
+    return 1/Math.sqrt(denom);
+  }
+  function computeSquareIntersection(cosA,sinA){ const t=squareT(cosA,sinA,squareRotDeg); return {x:circleX+cosA*t, y:circleY - sinA*t, t}; }
+  function computeTriangleIntersection(cosA,sinA){ const t=triangleT(cosA,sinA,triangleRotDeg); return {x:circleX+cosA*t, y:circleY - sinA*t, t}; }
+  function computeEllipseIntersection(cosA,sinA){ const t=ellipseT(cosA,sinA,ellipseRotDeg,ellipseEcc); return {x:circleX+cosA*t, y:circleY - sinA*t, t}; }
 
-  function getSquareVerticesMath(rotDeg){
-    const S = R / Math.SQRT2;
-    const base = [{x:S,y:S},{x:-S,y:S},{x:-S,y:-S},{x:S,y:-S}];
-    const phi = rotToMathRad(rotDeg);
-    return base.map(p=> rotatePointMath(p.x, p.y, phi));
-  }
-  function getTriangleVerticesMath(rotDeg){
-    const sqrt3 = Math.sqrt(3);
-    const base = [{x:0,y:R},{x:-sqrt3/2*R,y:-0.5*R},{x:sqrt3/2*R,y:-0.5*R}];
-    const phi = rotToMathRad(rotDeg);
-    return base.map(p=> rotatePointMath(p.x, p.y, phi));
-  }
-
-  function rayPolygonIntersectionT(dirX, dirY, verts){
-    // verts in math coords, dir is (cos, sin) normalized
-    let best = Infinity;
-    const n = verts.length;
-    for(let i=0;i<n;i++){
-      const a = verts[i];
-      const b = verts[(i+1)%n];
-      const ax = a.x, ay = a.y;
-      const ex = b.x - ax, ey = b.y - ay;
-      const D = ex*dirY - dirX*ey;
-      if(Math.abs(D) < 1e-9) continue;
-      const Dt = ex*ay - ax*ey;
-      const Du = dirX*ay - ax*dirY;
-      const t = Dt / D;
-      const u = Du / D;
-      if(t > 1e-6 && u >= -1e-6 && u <= 1+1e-6 && t < best) best = t;
-    }
-    return isFinite(best) ? best : R;
-  }
-
-  function squareT(cosA, sinA, rotDeg){
-    const verts = getSquareVerticesMath(rotDeg);
-    return rayPolygonIntersectionT(cosA, sinA, verts);
-  }
-  function triangleT(cosA, sinA, rotDeg){
-    const verts = getTriangleVerticesMath(rotDeg);
-    return rayPolygonIntersectionT(cosA, sinA, verts);
-  }
-  function computeSquareIntersection(cosA, sinA){
-    const t = squareT(cosA, sinA, squareRotDeg);
-    return { x: circleX + cosA*t, y: circleY - sinA*t, t };
-  }
-  function computeTriangleIntersection(cosA, sinA){
-    const t = triangleT(cosA, sinA, triangleRotDeg);
-    return { x: circleX + cosA*t, y: circleY - sinA*t, t };
-  }
+  // wave helpers
+  function squareWaveValue(theta){ const A=R/Math.SQRT2; return (Math.sin(theta)>=0? A : -A); }
+  function sawtoothValue(theta){ const A=R*0.85; const twoPi=2*Math.PI; let t=((theta%twoPi)+twoPi)%twoPi; return (t/Math.PI -1)*A; }
 
   function drawGrid(){
     ctx.save();
-    const gridColor = getComputedStyle(document.body).getPropertyValue('--grid').trim() || '#e2e8f0';
-    const borderStrong = getComputedStyle(document.body).getPropertyValue('--border-strong').trim() || '#cbd5e1';
-    ctx.strokeStyle = gridColor; ctx.lineWidth=1; ctx.globalAlpha=0.9;
-    const step = waveW/6;
-    ctx.beginPath();
-    for(let i=0;i<=6;i++){ const x=Math.round(waveX+i*step)+0.5; ctx.moveTo(x, waveY-R-24); ctx.lineTo(x, waveY+R+24); }
-    ctx.globalAlpha=0.32; ctx.stroke();
-    ctx.globalAlpha=0.6;
-    ctx.beginPath();
-    ctx.moveTo(circleX-R-28, Math.round(circleY)+0.5); ctx.lineTo(circleX+R+28, Math.round(circleY)+0.5);
-    ctx.moveTo(Math.round(circleX)+0.5, circleY-R-28); ctx.lineTo(Math.round(circleX)+0.5, circleY+R+28); ctx.stroke();
-    ctx.strokeStyle=borderStrong; ctx.beginPath(); ctx.moveTo(waveX-18, Math.round(waveY)+0.5); ctx.lineTo(waveX+waveW, Math.round(waveY)+0.5); ctx.stroke();
-    ctx.restore();
+    const gridColor=getComputedStyle(document.body).getPropertyValue('--grid').trim()||'#e2e8f0';
+    const borderStrong=getComputedStyle(document.body).getPropertyValue('--border-strong').trim()||'#cbd5e1';
+    ctx.strokeStyle=gridColor; ctx.lineWidth=1; ctx.globalAlpha=0.9;
+    const step=waveW/6; ctx.beginPath(); for(let i=0;i<=6;i++){ const x=Math.round(waveX+i*step)+0.5; ctx.moveTo(x,waveY-R-24); ctx.lineTo(x,waveY+R+24); } ctx.globalAlpha=0.32; ctx.stroke();
+    ctx.globalAlpha=0.6; ctx.beginPath(); ctx.moveTo(circleX-R-28,Math.round(circleY)+0.5); ctx.lineTo(circleX+R+28,Math.round(circleY)+0.5); ctx.moveTo(Math.round(circleX)+0.5,circleY-R-28); ctx.lineTo(Math.round(circleX)+0.5,circleY+R+28); ctx.stroke();
+    ctx.strokeStyle=borderStrong; ctx.beginPath(); ctx.moveTo(waveX-18,Math.round(waveY)+0.5); ctx.lineTo(waveX+waveW,Math.round(waveY)+0.5); ctx.stroke(); ctx.restore();
   }
-
-  function drawCircle(angle, sinA, cosA){
+  function drawCircle(angle,sinA,cosA){
     ctx.save();
-    const isGray = !showSine;
-    const circleColor = isGray ? '#cbd5e1' : (getComputedStyle(document.body).getPropertyValue('--circle').trim() || '#0f172a');
-    ctx.strokeStyle=circleColor; ctx.lineWidth=isGray?1.6:2; ctx.globalAlpha=isGray?0.95:1;
-    ctx.beginPath(); ctx.arc(circleX,circleY,R,0,Math.PI*2); ctx.stroke(); ctx.globalAlpha=1;
-    ctx.strokeStyle=getComputedStyle(document.body).getPropertyValue('--accent-light').trim()||'#7dd3fc'; ctx.globalAlpha=showSine?0.55:0.28; ctx.lineWidth=1.5;
-    ctx.beginPath(); ctx.arc(circleX,circleY,22,0,-angle,angle>0); ctx.stroke(); ctx.globalAlpha=1;
+    const isGray=!showSine; const circleColor=isGray?'#cbd5e1':(getComputedStyle(document.body).getPropertyValue('--circle').trim()||'#0f172a');
+    ctx.strokeStyle=circleColor; ctx.lineWidth=isGray?1.6:2; ctx.globalAlpha=isGray?0.95:1; ctx.beginPath(); ctx.arc(circleX,circleY,R,0,Math.PI*2); ctx.stroke(); ctx.globalAlpha=1;
+    ctx.strokeStyle=getComputedStyle(document.body).getPropertyValue('--accent-light').trim()||'#7dd3fc'; ctx.globalAlpha=showSine?0.55:0.28; ctx.lineWidth=1.5; ctx.beginPath(); ctx.arc(circleX,circleY,22,0,-angle,angle>0); ctx.stroke(); ctx.globalAlpha=1;
     const rx=circleX+cosA*R, ry=circleY-sinA*R;
-    ctx.strokeStyle=getComputedStyle(document.body).getPropertyValue('--accent-light').trim()||'#7dd3fc'; ctx.lineWidth=2.6; ctx.lineCap='round'; ctx.globalAlpha=showSine?1:0.55;
-    ctx.beginPath(); ctx.moveTo(circleX,circleY); ctx.lineTo(rx,ry); ctx.stroke(); ctx.globalAlpha=0.18; ctx.lineWidth=10; ctx.stroke(); ctx.globalAlpha=1;
+    ctx.strokeStyle=getComputedStyle(document.body).getPropertyValue('--accent-light').trim()||'#7dd3fc'; ctx.lineWidth=2.6; ctx.lineCap='round'; ctx.globalAlpha=showSine?1:0.55; ctx.beginPath(); ctx.moveTo(circleX,circleY); ctx.lineTo(rx,ry); ctx.stroke(); ctx.globalAlpha=0.18; ctx.lineWidth=10; ctx.stroke(); ctx.globalAlpha=1;
     const dotColor=getComputedStyle(document.body).getPropertyValue('--accent-dark').trim()||'#1e3a8a'; const isDark=document.body.classList.contains('dark-mode');
     ctx.fillStyle=isDark?'#93c5fd':dotColor; ctx.beginPath(); ctx.arc(rx,ry,7.2,0,Math.PI*2); ctx.fill(); ctx.strokeStyle=isDark?'#0b1020':'#fff'; ctx.lineWidth=2; ctx.stroke();
     ctx.fillStyle=circleColor; ctx.beginPath(); ctx.arc(circleX,circleY,2.2,0,Math.PI*2); ctx.fill();
-    ctx.save(); ctx.setLineDash([4,5]); ctx.strokeStyle=circleColor; ctx.globalAlpha=isGray?0.16:0.22; ctx.lineWidth=1;
-    ctx.beginPath(); ctx.moveTo(rx,ry); ctx.lineTo(rx,circleY); ctx.moveTo(rx,ry); ctx.lineTo(circleX,ry); ctx.stroke(); ctx.restore();
+    ctx.save(); ctx.setLineDash([4,5]); ctx.strokeStyle=circleColor; ctx.globalAlpha=isGray?0.16:0.22; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(rx,ry); ctx.lineTo(rx,circleY); ctx.moveTo(rx,ry); ctx.lineTo(circleX,ry); ctx.stroke(); ctx.restore();
     ctx.restore(); return {rx,ry};
   }
+  function drawSquare(){ const verts=getSquareVerticesMath(squareRotDeg); ctx.save(); ctx.strokeStyle='#16a34a'; ctx.lineWidth=1.8; ctx.setLineDash([7,5]); ctx.globalAlpha=0.95; ctx.beginPath(); verts.forEach((v,i)=>{ const cx=circleX+v.x, cy=circleY - v.y; if(i===0) ctx.moveTo(cx,cy); else ctx.lineTo(cx,cy); }); ctx.closePath(); ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha=0.22; ctx.fillStyle='#16a34a'; verts.forEach(v=>{ ctx.beginPath(); ctx.arc(circleX+v.x,circleY - v.y,2,0,Math.PI*2); ctx.fill(); }); ctx.restore(); }
+  function drawTriangle(){ const verts=getTriangleVerticesMath(triangleRotDeg); ctx.save(); ctx.strokeStyle='#c2410c'; ctx.lineWidth=1.8; ctx.setLineDash([7,5]); ctx.globalAlpha=0.95; ctx.beginPath(); verts.forEach((v,i)=>{ const cx=circleX+v.x, cy=circleY - v.y; if(i===0) ctx.moveTo(cx,cy); else ctx.lineTo(cx,cy); }); ctx.closePath(); ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha=0.22; ctx.fillStyle='#c2410c'; verts.forEach(v=>{ ctx.beginPath(); ctx.arc(circleX+v.x,circleY - v.y,2,0,Math.PI*2); ctx.fill(); }); ctx.restore(); }
+  function drawEllipse(){ const {a,b}=getEllipseAxes(); const phi=rotToMathRad(ellipseRotDeg); ctx.save(); ctx.strokeStyle='#0d9488'; ctx.lineWidth=1.8; ctx.setLineDash([7,5]); ctx.globalAlpha=0.95; ctx.beginPath(); for(let i=0;i<=72;i++){ const th=i/72*2*Math.PI; const x0=a*Math.cos(th), y0=b*Math.sin(th); const r=rotatePointMath(x0,y0,phi); const cx=circleX+r.x, cy=circleY - r.y; if(i===0) ctx.moveTo(cx,cy); else ctx.lineTo(cx,cy);} ctx.closePath(); ctx.stroke(); ctx.restore(); }
+  function drawSquareWaveShape(){ const A=R/Math.SQRT2; ctx.save(); ctx.strokeStyle='#7c3aed'; ctx.lineWidth=1.6; ctx.setLineDash([6,4]); ctx.globalAlpha=0.85; ctx.beginPath(); ctx.moveTo(circleX-R,circleY - A); ctx.lineTo(circleX+R,circleY - A); ctx.moveTo(circleX-R,circleY + A); ctx.lineTo(circleX+R,circleY + A); ctx.stroke(); ctx.setLineDash([2,6]); ctx.globalAlpha=0.28; ctx.beginPath(); ctx.moveTo(circleX,circleY - A); ctx.lineTo(circleX,circleY + A); ctx.stroke(); ctx.restore(); }
+  function drawSawtoothShape(){ const A=R*0.85; ctx.save(); ctx.strokeStyle='#dc2626'; ctx.lineWidth=1.6; ctx.setLineDash([6,4]); ctx.globalAlpha=0.85; ctx.beginPath(); ctx.moveTo(circleX-R,circleY + A); ctx.lineTo(circleX+R,circleY - A); ctx.stroke(); ctx.setLineDash([2,6]); ctx.globalAlpha=0.22; ctx.beginPath(); ctx.moveTo(circleX-R,circleY - A); ctx.lineTo(circleX+R,circleY - A); ctx.moveTo(circleX-R,circleY + A); ctx.lineTo(circleX+R,circleY + A); ctx.stroke(); ctx.restore(); }
 
-  function drawSquare(){
-    const verts = getSquareVerticesMath(squareRotDeg);
-    ctx.save(); ctx.strokeStyle='#16a34a'; ctx.lineWidth=1.8; ctx.setLineDash([7,5]); ctx.globalAlpha=0.95;
-    ctx.beginPath();
-    verts.forEach((v,i)=>{ const cx=circleX+v.x, cy=circleY - v.y; if(i===0) ctx.moveTo(cx,cy); else ctx.lineTo(cx,cy); });
-    ctx.closePath(); ctx.stroke();
-    ctx.setLineDash([]); ctx.globalAlpha=0.22; ctx.fillStyle='#16a34a';
-    verts.forEach(v=>{ ctx.beginPath(); ctx.arc(circleX+v.x, circleY - v.y, 2,0,Math.PI*2); ctx.fill(); });
-    ctx.restore();
-  }
-  function drawTriangle(){
-    const verts = getTriangleVerticesMath(triangleRotDeg);
-    ctx.save(); ctx.strokeStyle='#c2410c'; ctx.lineWidth=1.8; ctx.setLineDash([7,5]); ctx.globalAlpha=0.95;
-    ctx.beginPath();
-    verts.forEach((v,i)=>{ const cx=circleX+v.x, cy=circleY - v.y; if(i===0) ctx.moveTo(cx,cy); else ctx.lineTo(cx,cy); });
-    ctx.closePath(); ctx.stroke();
-    ctx.setLineDash([]); ctx.globalAlpha=0.22; ctx.fillStyle='#c2410c';
-    verts.forEach(v=>{ ctx.beginPath(); ctx.arc(circleX+v.x, circleY - v.y, 2,0,Math.PI*2); ctx.fill(); });
-    ctx.restore();
-  }
-
-  function drawGreenDot(ix,iy){ ctx.save(); const isDark=document.body.classList.contains('dark-mode'); ctx.fillStyle=isDark?'#4ade80':'#166534'; ctx.beginPath(); ctx.arc(ix,iy,6.4,0,Math.PI*2); ctx.fill(); ctx.strokeStyle=isDark?'#0b1020':'#fff'; ctx.lineWidth=2; ctx.stroke(); ctx.globalAlpha=0.22; ctx.fillStyle='#22c55e'; ctx.beginPath(); ctx.arc(ix,iy,13,0,Math.PI*2); ctx.fill(); ctx.restore(); }
-  function drawOrangeDot(ix,iy){ ctx.save(); const isDark=document.body.classList.contains('dark-mode'); ctx.fillStyle=isDark?'#fb923c':'#9a3412'; ctx.beginPath(); ctx.arc(ix,iy,6.4,0,Math.PI*2); ctx.fill(); ctx.strokeStyle=isDark?'#0b1020':'#fff'; ctx.lineWidth=2; ctx.stroke(); ctx.globalAlpha=0.22; ctx.fillStyle='#f97316'; ctx.beginPath(); ctx.arc(ix,iy,13,0,Math.PI*2); ctx.fill(); ctx.restore(); }
+  function drawDot(ix,iy,color,glow){ ctx.save(); const isDark=document.body.classList.contains('dark-mode'); ctx.fillStyle=isDark?glow:color; ctx.beginPath(); ctx.arc(ix,iy,6.4,0,Math.PI*2); ctx.fill(); ctx.strokeStyle=isDark?'#0b1020':'#fff'; ctx.lineWidth=2; ctx.stroke(); ctx.globalAlpha=0.22; ctx.fillStyle=glow; ctx.beginPath(); ctx.arc(ix,iy,13,0,Math.PI*2); ctx.fill(); ctx.restore(); }
+  function drawGreenDot(ix,iy){ drawDot(ix,iy,'#166534','#4ade80'); }
+  function drawOrangeDot(ix,iy){ drawDot(ix,iy,'#9a3412','#fb923c'); }
+  function drawPurpleDot(ix,iy){ drawDot(ix,iy,'#5b21b6','#a78bfa'); }
+  function drawRedDot(ix,iy){ drawDot(ix,iy,'#991b1b','#f87171'); }
+  function drawTealDot(ix,iy){ drawDot(ix,iy,'#0f766e','#2dd4bf'); }
 
   function drawConnector(rx,ry,wx,wy){ ctx.save(); ctx.strokeStyle=getComputedStyle(document.body).getPropertyValue('--text-tertiary').trim()||'#94a3b8'; ctx.globalAlpha=0.55; ctx.setLineDash([6,6]); ctx.lineWidth=1.2; ctx.beginPath(); ctx.moveTo(rx+8,ry); ctx.lineTo(wx-10,wy); ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha=0.35; ctx.beginPath(); ctx.moveTo(wx-14,wy-3.5); ctx.lineTo(wx-8,wy); ctx.lineTo(wx-14,wy+3.5); ctx.stroke(); ctx.restore(); }
-  function drawGreenConnector(ix,iy,gx,gy){ ctx.save(); ctx.strokeStyle='#16a34a'; ctx.globalAlpha=0.48; ctx.setLineDash([5,6]); ctx.lineWidth=1.15; ctx.beginPath(); ctx.moveTo(ix+7,iy); ctx.lineTo(gx-9,gy); ctx.stroke(); ctx.restore(); }
-  function drawOrangeConnector(ix,iy,gx,gy){ ctx.save(); ctx.strokeStyle='#c2410c'; ctx.globalAlpha=0.48; ctx.setLineDash([5,6]); ctx.lineWidth=1.15; ctx.beginPath(); ctx.moveTo(ix+7,iy); ctx.lineTo(gx-9,gy); ctx.stroke(); ctx.restore(); }
+  function drawColorConnector(ix,iy,gx,gy,col){ ctx.save(); ctx.strokeStyle=col; ctx.globalAlpha=0.48; ctx.setLineDash([5,6]); ctx.lineWidth=1.15; ctx.beginPath(); ctx.moveTo(ix+7,iy); ctx.lineTo(gx-9,gy); ctx.stroke(); ctx.restore(); }
 
-  function drawWave(currentAngle){
-    ctx.save();
-    const waveColor=getComputedStyle(document.body).getPropertyValue('--accent').trim()||'#2563eb';
-    const gridColor=getComputedStyle(document.body).getPropertyValue('--border-strong').trim()||'#cbd5e1';
-    ctx.strokeStyle=gridColor; ctx.lineWidth=1; ctx.globalAlpha=0.7; ctx.beginPath(); ctx.moveTo(waveX,waveY-R-18); ctx.lineTo(waveX,waveY+R+18); ctx.stroke();
-    ctx.globalAlpha=1; ctx.font='10px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace'; ctx.fillStyle=getComputedStyle(document.body).getPropertyValue('--text-tertiary').trim(); ctx.textAlign='center';
-    if(W>=720){ ['0','π','2π','3π','4π','5π','6π'].forEach((l,i)=>{ const x=waveX+(i/6)*waveW; ctx.fillText(l,x,waveY+R+30); }); }
-    const stepX=Math.max(1.2,Math.min(2.4,waveW/380)); const needed=Math.ceil(waveW/stepX)+1;
-    ctx.beginPath();
-    for(let i=0;i<needed;i++){ const off=(i*stepX/waveW)*TOTAL_ANGLE; const a=currentAngle-off; const y=waveY-Math.sin(a)*R; const x=waveX+i*stepX; if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y); }
-    ctx.strokeStyle=waveColor; ctx.lineWidth=2.4; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.shadowColor=waveColor; ctx.shadowBlur=10; ctx.globalAlpha=0.95; ctx.stroke(); ctx.shadowBlur=0;
-    ctx.globalAlpha=0.08; ctx.lineTo(waveX+needed*stepX,waveY); ctx.lineTo(waveX,waveY); ctx.closePath(); ctx.fillStyle=waveColor; ctx.fill(); ctx.globalAlpha=1;
-    const wy=waveY-Math.sin(currentAngle)*R, wx=waveX; const dotColor=getComputedStyle(document.body).getPropertyValue('--accent-dark').trim()||'#1e3a8a'; const isDark=document.body.classList.contains('dark-mode');
-    ctx.fillStyle=isDark?'#93c5fd':dotColor; ctx.beginPath(); ctx.arc(wx,wy,6.8,0,Math.PI*2); ctx.fill(); ctx.strokeStyle=isDark?'#0b1020':'#fff'; ctx.lineWidth=2; ctx.stroke();
-    ctx.globalAlpha=0.22; ctx.beginPath(); ctx.arc(wx,wy,14,0,Math.PI*2); ctx.fillStyle=waveColor; ctx.fill(); ctx.restore(); return {wx,wy};
+  function drawWave(cur){ ctx.save(); const waveColor=getComputedStyle(document.body).getPropertyValue('--accent').trim()||'#2563eb'; const gridColor=getComputedStyle(document.body).getPropertyValue('--border-strong').trim()||'#cbd5e1'; ctx.strokeStyle=gridColor; ctx.lineWidth=1; ctx.globalAlpha=0.7; ctx.beginPath(); ctx.moveTo(waveX,waveY-R-18); ctx.lineTo(waveX,waveY+R+18); ctx.stroke(); ctx.globalAlpha=1; ctx.font='10px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace'; ctx.fillStyle=getComputedStyle(document.body).getPropertyValue('--text-tertiary').trim(); ctx.textAlign='center'; if(W>=720){ ['0','π','2π','3π','4π','5π','6π'].forEach((l,i)=>{ ctx.fillText(l,waveX+(i/6)*waveW,waveY+R+30); }); } const stepX=Math.max(1.2,Math.min(2.4,waveW/380)); const needed=Math.ceil(waveW/stepX)+1; ctx.beginPath(); for(let i=0;i<needed;i++){ const off=(i*stepX/waveW)*TOTAL_ANGLE; const a=cur-off; const y=waveY-Math.sin(a)*R; const x=waveX+i*stepX; if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y); } ctx.strokeStyle=waveColor; ctx.lineWidth=2.4; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.shadowColor=waveColor; ctx.shadowBlur=10; ctx.globalAlpha=0.95; ctx.stroke(); ctx.shadowBlur=0; ctx.globalAlpha=0.08; ctx.lineTo(waveX+needed*stepX,waveY); ctx.lineTo(waveX,waveY); ctx.closePath(); ctx.fillStyle=waveColor; ctx.fill(); ctx.globalAlpha=1; const wy=waveY-Math.sin(cur)*R, wx=waveX; const dotColor=getComputedStyle(document.body).getPropertyValue('--accent-dark').trim()||'#1e3a8a'; const isDark=document.body.classList.contains('dark-mode'); ctx.fillStyle=isDark?'#93c5fd':dotColor; ctx.beginPath(); ctx.arc(wx,wy,6.8,0,Math.PI*2); ctx.fill(); ctx.strokeStyle=isDark?'#0b1020':'#fff'; ctx.lineWidth=2; ctx.stroke(); ctx.globalAlpha=0.22; ctx.beginPath(); ctx.arc(wx,wy,14,0,Math.PI*2); ctx.fillStyle=waveColor; ctx.fill(); ctx.restore(); return {wx,wy}; }
+  function drawGenericWave(cur, getY, color, glow){
+    ctx.save(); const stepX=Math.max(1.2,Math.min(2.4,waveW/380)); const needed=Math.ceil(waveW/stepX)+1; ctx.beginPath();
+    for(let i=0;i<needed;i++){ const off=(i*stepX/waveW)*TOTAL_ANGLE; const a=cur-off; const yv=getY(a); const y=waveY - yv; const x=waveX+i*stepX; if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y); }
+    ctx.strokeStyle=color; ctx.lineWidth=2.2; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.globalAlpha=0.92; ctx.stroke();
+    ctx.globalAlpha=0.07; ctx.lineTo(waveX+needed*stepX,waveY); ctx.lineTo(waveX,waveY); ctx.closePath(); ctx.fillStyle=color; ctx.fill(); ctx.globalAlpha=1;
+    const y0=getY(cur); const gy=waveY - y0; const gx=waveX; const isDark=document.body.classList.contains('dark-mode');
+    ctx.fillStyle=isDark?glow:color; ctx.beginPath(); ctx.arc(gx,gy,6,0,Math.PI*2); ctx.fill(); ctx.strokeStyle=isDark?'#0b1020':'#fff'; ctx.lineWidth=2; ctx.stroke(); ctx.restore(); return {gx,gy};
   }
-  function drawGreenWave(currentAngle){
-    ctx.save(); const waveColor='#16a34a'; const stepX=Math.max(1.2,Math.min(2.4,waveW/380)); const needed=Math.ceil(waveW/stepX)+1;
-    ctx.beginPath();
-    for(let i=0;i<needed;i++){ const off=(i*stepX/waveW)*TOTAL_ANGLE; const a=currentAngle-off; const ca=Math.cos(a), sa=Math.sin(a); const t=squareT(ca,sa,squareRotDeg); const gv=sa*t/R; const y=waveY-gv*R; const x=waveX+i*stepX; if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y); }
-    ctx.strokeStyle=waveColor; ctx.lineWidth=2.2; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.globalAlpha=0.92; ctx.stroke();
-    ctx.globalAlpha=0.07; ctx.lineTo(waveX+needed*stepX,waveY); ctx.lineTo(waveX,waveY); ctx.closePath(); ctx.fillStyle=waveColor; ctx.fill(); ctx.globalAlpha=1;
-    const ca0=Math.cos(currentAngle), sa0=Math.sin(currentAngle); const t0=squareT(ca0,sa0,squareRotDeg); const gy=waveY-sa0*t0; const gx=waveX; const isDark=document.body.classList.contains('dark-mode');
-    ctx.fillStyle=isDark?'#4ade80':'#166534'; ctx.beginPath(); ctx.arc(gx,gy,6,0,Math.PI*2); ctx.fill(); ctx.strokeStyle=isDark?'#0b1020':'#fff'; ctx.lineWidth=2; ctx.stroke(); ctx.restore(); return {gx,gy};
-  }
-  function drawOrangeWave(currentAngle){
-    ctx.save(); const waveColor='#c2410c'; const stepX=Math.max(1.2,Math.min(2.4,waveW/380)); const needed=Math.ceil(waveW/stepX)+1;
-    ctx.beginPath();
-    for(let i=0;i<needed;i++){ const off=(i*stepX/waveW)*TOTAL_ANGLE; const a=currentAngle-off; const ca=Math.cos(a), sa=Math.sin(a); const t=triangleT(ca,sa,triangleRotDeg); const ov=sa*t/R; const y=waveY-ov*R; const x=waveX+i*stepX; if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y); }
-    ctx.strokeStyle=waveColor; ctx.lineWidth=2.2; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.globalAlpha=0.92; ctx.stroke();
-    ctx.globalAlpha=0.07; ctx.lineTo(waveX+needed*stepX,waveY); ctx.lineTo(waveX,waveY); ctx.closePath(); ctx.fillStyle=waveColor; ctx.fill(); ctx.globalAlpha=1;
-    const ca0=Math.cos(currentAngle), sa0=Math.sin(currentAngle); const t0=triangleT(ca0,sa0,triangleRotDeg); const gy=waveY-sa0*t0; const gx=waveX; const isDark=document.body.classList.contains('dark-mode');
-    ctx.fillStyle=isDark?'#fb923c':'#9a3412'; ctx.beginPath(); ctx.arc(gx,gy,6,0,Math.PI*2); ctx.fill(); ctx.strokeStyle=isDark?'#0b1020':'#fff'; ctx.lineWidth=2; ctx.stroke(); ctx.restore(); return {gx,gy};
-  }
+  function drawGreenWave(cur){ return drawGenericWave(cur, a=>{ const ca=Math.cos(a), sa=Math.sin(a); const t=squareT(ca,sa,squareRotDeg); return sa*t; }, '#16a34a', '#4ade80'); }
+  function drawOrangeWave(cur){ return drawGenericWave(cur, a=>{ const ca=Math.cos(a), sa=Math.sin(a); const t=triangleT(ca,sa,triangleRotDeg); return sa*t; }, '#c2410c', '#fb923c'); }
+  function drawSquareWave(cur){ return drawGenericWave(cur, a=>squareWaveValue(a), '#7c3aed', '#a78bfa'); }
+  function drawSawtoothWave(cur){ return drawGenericWave(cur, a=>sawtoothValue(a), '#dc2626', '#f87171'); }
+  function drawEllipseWave(cur){ return drawGenericWave(cur, a=>{ const ca=Math.cos(a), sa=Math.sin(a); const t=ellipseT(ca,sa,ellipseRotDeg,ellipseEcc); return sa*t; }, '#0d9488', '#2dd4bf'); }
 
-  function drawLabels(){
-    ctx.save(); ctx.font='600 11px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace'; ctx.fillStyle=getComputedStyle(document.body).getPropertyValue('--text-tertiary').trim(); ctx.textAlign='center'; ctx.letterSpacing='0.06em';
-    if(W>=720){ ctx.fillText('UNIT CIRCLE', circleX, circleY-R-38); ctx.fillText('sin(θ) 0→6π — time →', waveX+waveW/2, waveY-R-38); }
-    else { ctx.fillText('UNIT CIRCLE', circleX, 18); ctx.fillText('sin(θ) 0→6π', W/2, waveY-R-32); }
-    ctx.restore();
-  }
-  function updateReadouts(angle, sinA, cosA){
-    const deg=(angle*180/Math.PI)%360; document.getElementById('angleVal').firstChild.textContent=deg.toFixed(1)+'° '; document.getElementById('angleRad').textContent=angle.toFixed(2)+' rad';
-    document.getElementById('sinVal').firstChild.textContent=sinA.toFixed(3)+' '; document.getElementById('cosVal').firstChild.textContent=cosA.toFixed(3)+' ';
-    document.getElementById('angleBar').style.setProperty('--w', (deg/360*100)+'%');
-    document.getElementById('sinBar').style.setProperty('--w', ((sinA+1)/2*100)+'%');
-    document.getElementById('cosBar').style.setProperty('--w', ((cosA+1)/2*100)+'%');
-  }
+  function drawLabels(){ ctx.save(); ctx.font='600 11px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace'; ctx.fillStyle=getComputedStyle(document.body).getPropertyValue('--text-tertiary').trim(); ctx.textAlign='center'; ctx.letterSpacing='0.06em'; if(W>=720){ ctx.fillText('UNIT CIRCLE',circleX,circleY-R-38); ctx.fillText('WAVES 0→6π — time →',waveX+waveW/2,waveY-R-38); } else { ctx.fillText('UNIT CIRCLE',circleX,18); ctx.fillText('WAVES 0→6π',W/2,waveY-R-32); } ctx.restore(); }
+  function updateReadouts(a,sa,ca){ const deg=(a*180/Math.PI)%360; document.getElementById('angleVal').firstChild.textContent=deg.toFixed(1)+'° '; document.getElementById('angleRad').textContent=a.toFixed(2)+' rad'; document.getElementById('sinVal').firstChild.textContent=sa.toFixed(3)+' '; document.getElementById('cosVal').firstChild.textContent=ca.toFixed(3)+' '; document.getElementById('angleBar').style.setProperty('--w',(deg/360*100)+'%'); document.getElementById('sinBar').style.setProperty('--w',((sa+1)/2*100)+'%'); document.getElementById('cosBar').style.setProperty('--w',((ca+1)/2*100)+'%'); }
 
-  function frame(){
-    const cur=angle; const sinA=Math.sin(cur), cosA=Math.cos(cur);
-    ctx.clearRect(0,0,W,H); drawGrid(); drawLabels();
-    if(showSquare) drawSquare();
-    if(showTriangle) drawTriangle();
-    const {rx,ry}=drawCircle(cur,sinA,cosA);
+  function frame(){ const cur=angle, sa=Math.sin(cur), ca=Math.cos(cur); ctx.clearRect(0,0,W,H); drawGrid(); drawLabels(); if(showSquare) drawSquare(); if(showTriangle) drawTriangle(); if(showEllipse) drawEllipse(); if(showSquareWave) drawSquareWaveShape(); if(showSawtooth) drawSawtoothShape();
+    const {rx,ry}=drawCircle(cur,sa,ca);
     if(showSine){ const wh=drawWave(cur); drawConnector(rx,ry,wh.wx,wh.wy); }
-    if(showSquare){ const sq=computeSquareIntersection(cosA,sinA); const gh=drawGreenWave(cur); drawGreenDot(sq.x,sq.y); drawGreenConnector(sq.x,sq.y,gh.gx,gh.gy); }
-    if(showTriangle){ const tr=computeTriangleIntersection(cosA,sinA); const oh=drawOrangeWave(cur); drawOrangeDot(tr.x,tr.y); drawOrangeConnector(tr.x,tr.y,oh.gx,oh.gy); }
-    updateReadouts(cur,sinA,cosA);
+    if(showSquare){ const sq=computeSquareIntersection(ca,sa); const gh=drawGreenWave(cur); drawGreenDot(sq.x,sq.y); drawColorConnector(sq.x,sq.y,gh.gx,gh.gy,'#16a34a'); }
+    if(showTriangle){ const tr=computeTriangleIntersection(ca,sa); const oh=drawOrangeWave(cur); drawOrangeDot(tr.x,tr.y); drawColorConnector(tr.x,tr.y,oh.gx,oh.gy,'#c2410c'); }
+    if(showSquareWave){ const y=squareWaveValue(cur); const ix=circleX+ca*R, iy=circleY - y; const ph=drawSquareWave(cur); drawPurpleDot(ix,iy); drawColorConnector(ix,iy,ph.gx,ph.gy,'#7c3aed'); }
+    if(showSawtooth){ const y=sawtoothValue(cur); const ix=circleX+ca*R, iy=circleY - y; const rh=drawSawtoothWave(cur); drawRedDot(ix,iy); drawColorConnector(ix,iy,rh.gx,rh.gy,'#dc2626'); }
+    if(showEllipse){ const el=computeEllipseIntersection(ca,sa); const eh=drawEllipseWave(cur); drawTealDot(el.x,el.y); drawColorConnector(el.x,el.y,eh.gx,eh.gy,'#0d9488'); }
+    updateReadouts(cur,sa,ca);
   }
-  function loop(now){
-    if(!running) return;
-    const dt=now-lastFrameTime; lastFrameTime=now;
-    if(frequency>1e-9) angle += (dt/1000)*2*Math.PI*frequency;
-    frame(); requestAnimationFrame(loop);
-  }
+  function loop(now){ if(!running) return; const dt=now-lastFrameTime; lastFrameTime=now; if(frequency>1e-9) angle += (dt/1000)*2*Math.PI*frequency; frame(); requestAnimationFrame(loop); }
   requestAnimationFrame(loop);
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){ running=false; playLabel.textContent='Play'; iconPlay.style.display='block'; iconPause.style.display='none'; frame(); }
 })();
@@ -1323,7 +1188,6 @@ document.addEventListener('fullscreenchange', function() {
 
 function loadHtml2Canvas(){ return Promise.reject(new Error('offline - no CDN')); }
 function saveAsImage(){
-    // Offline build: no CDN, use Print / Save as PDF
     alert('Offline build: Use Print / Save as PDF (works offline). Save as image requires online CDN.');
     window.print();
 }
