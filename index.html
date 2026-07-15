@@ -863,7 +863,7 @@ footer a:hover{color:var(--accent)}
 
   <footer>
     elliottcollins · 2026-07-14<br>
-    Offline build — fully self-contained, no CDN — works on GitHub Pages & via email zip
+    Offline build — fully self-contained, no CDN
   </footer>
 </div>
 
@@ -968,6 +968,23 @@ footer a:hover{color:var(--accent)}
   function squareWaveValue(theta){ const A=R/Math.SQRT2; return (Math.sin(theta)>=0? A : -A); }
   function sawtoothValue(theta){ const A=R*0.85; const twoPi=2*Math.PI; let t=((theta%twoPi)+twoPi)%twoPi; return (t/Math.PI -1)*A; }
 
+  function computeSquareWaveIntersection(cosA,sinA){
+    const A=R/Math.SQRT2;
+    const wave = (sinA>=0? A : -A);
+    const absSin = Math.abs(sinA);
+    if(absSin < 0.08) return null; // near zero, would go to infinity
+    const t = wave / sinA; // = A/|sin| >0
+    return { x: circleX + cosA*t, y: circleY - wave, wave, t };
+  }
+  function computeSawtoothIntersection(cosA,sinA,theta){
+    const wave = sawtoothValue(theta);
+    const absSin = Math.abs(sinA);
+    if(absSin < 0.08) return null;
+    const t = wave / sinA; // may be negative -> dot behind center, still on line
+    // keep dot on line even if t negative, it will be on extension
+    return { x: circleX + cosA*t, y: circleY - wave, wave, t };
+  }
+
   function drawGrid(){
     ctx.save();
     const gridColor=getComputedStyle(document.body).getPropertyValue('--grid').trim()||'#e2e8f0';
@@ -993,8 +1010,48 @@ footer a:hover{color:var(--accent)}
   function drawSquare(){ const verts=getSquareVerticesMath(squareRotDeg); ctx.save(); ctx.strokeStyle='#16a34a'; ctx.lineWidth=1.8; ctx.setLineDash([7,5]); ctx.globalAlpha=0.95; ctx.beginPath(); verts.forEach((v,i)=>{ const cx=circleX+v.x, cy=circleY - v.y; if(i===0) ctx.moveTo(cx,cy); else ctx.lineTo(cx,cy); }); ctx.closePath(); ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha=0.22; ctx.fillStyle='#16a34a'; verts.forEach(v=>{ ctx.beginPath(); ctx.arc(circleX+v.x,circleY - v.y,2,0,Math.PI*2); ctx.fill(); }); ctx.restore(); }
   function drawTriangle(){ const verts=getTriangleVerticesMath(triangleRotDeg); ctx.save(); ctx.strokeStyle='#c2410c'; ctx.lineWidth=1.8; ctx.setLineDash([7,5]); ctx.globalAlpha=0.95; ctx.beginPath(); verts.forEach((v,i)=>{ const cx=circleX+v.x, cy=circleY - v.y; if(i===0) ctx.moveTo(cx,cy); else ctx.lineTo(cx,cy); }); ctx.closePath(); ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha=0.22; ctx.fillStyle='#c2410c'; verts.forEach(v=>{ ctx.beginPath(); ctx.arc(circleX+v.x,circleY - v.y,2,0,Math.PI*2); ctx.fill(); }); ctx.restore(); }
   function drawEllipse(){ const {a,b}=getEllipseAxes(); const phi=rotToMathRad(ellipseRotDeg); ctx.save(); ctx.strokeStyle='#0d9488'; ctx.lineWidth=1.8; ctx.setLineDash([7,5]); ctx.globalAlpha=0.95; ctx.beginPath(); for(let i=0;i<=72;i++){ const th=i/72*2*Math.PI; const x0=a*Math.cos(th), y0=b*Math.sin(th); const r=rotatePointMath(x0,y0,phi); const cx=circleX+r.x, cy=circleY - r.y; if(i===0) ctx.moveTo(cx,cy); else ctx.lineTo(cx,cy);} ctx.closePath(); ctx.stroke(); ctx.restore(); }
-  function drawSquareWaveShape(){ const A=R/Math.SQRT2; ctx.save(); ctx.strokeStyle='#7c3aed'; ctx.lineWidth=1.6; ctx.setLineDash([6,4]); ctx.globalAlpha=0.85; ctx.beginPath(); ctx.moveTo(circleX-R,circleY - A); ctx.lineTo(circleX+R,circleY - A); ctx.moveTo(circleX-R,circleY + A); ctx.lineTo(circleX+R,circleY + A); ctx.stroke(); ctx.setLineDash([2,6]); ctx.globalAlpha=0.28; ctx.beginPath(); ctx.moveTo(circleX,circleY - A); ctx.lineTo(circleX,circleY + A); ctx.stroke(); ctx.restore(); }
-  function drawSawtoothShape(){ const A=R*0.85; ctx.save(); ctx.strokeStyle='#dc2626'; ctx.lineWidth=1.6; ctx.setLineDash([6,4]); ctx.globalAlpha=0.85; ctx.beginPath(); ctx.moveTo(circleX-R,circleY + A); ctx.lineTo(circleX+R,circleY - A); ctx.stroke(); ctx.setLineDash([2,6]); ctx.globalAlpha=0.22; ctx.beginPath(); ctx.moveTo(circleX-R,circleY - A); ctx.lineTo(circleX+R,circleY - A); ctx.moveTo(circleX-R,circleY + A); ctx.lineTo(circleX+R,circleY + A); ctx.stroke(); ctx.restore(); }
+  function drawSquareWaveShape(){
+    const A=R/Math.SQRT2;
+    const maxX = 2.6*R;
+    ctx.save(); ctx.strokeStyle='#7c3aed'; ctx.lineWidth=1.6; ctx.setLineDash([7,5]); ctx.globalAlpha=0.9;
+    // two horizontal lines y=±A that produce square wave via r = A/|sin|
+    ctx.beginPath();
+    ctx.moveTo(circleX - maxX, circleY - A); ctx.lineTo(circleX + maxX, circleY - A);
+    ctx.moveTo(circleX - maxX, circleY + A); ctx.lineTo(circleX + maxX, circleY + A);
+    ctx.stroke();
+    // vertical jump guides at x=±maxX
+    ctx.setLineDash([2,7]); ctx.globalAlpha=0.22;
+    ctx.beginPath(); ctx.moveTo(circleX - maxX, circleY - A); ctx.lineTo(circleX - maxX, circleY + A);
+    ctx.moveTo(circleX + maxX, circleY - A); ctx.lineTo(circleX + maxX, circleY + A);
+    ctx.stroke();
+    ctx.restore();
+  }
+  function drawSawtoothShape(){
+    const A=R*0.85;
+    ctx.save(); ctx.strokeStyle='#dc2626'; ctx.lineWidth=1.7; ctx.setLineDash([7,5]); ctx.globalAlpha=0.88;
+    // Shape that gives sawtooth: locus of points (wave*cotθ, wave) for θ in (0,2π)
+    // This is the curve r(θ)=sawtooth(θ)/sinθ, dot at intersection tracks it and stays on radius line
+    ctx.beginPath();
+    let started=false;
+    const steps=220;
+    for(let i=0;i<=steps;i++){
+      const th = (i/steps)*2*Math.PI + 0.12; // avoid sin=0
+      if(th>2*Math.PI-0.12) break;
+      const sa=Math.sin(th), ca=Math.cos(th);
+      if(Math.abs(sa)<0.08) { started=false; continue; }
+      const wave = sawtoothValue(th);
+      const t = wave / sa;
+      // clip to visible area to avoid infinity
+      if(Math.abs(t) > 3.2*R) { started=false; continue; }
+      const x = circleX + ca*t;
+      const y = circleY - wave;
+      if(!started){ ctx.moveTo(x,y); started=true; } else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+    // faint center cross for reference
+    ctx.setLineDash([2,8]); ctx.globalAlpha=0.18; ctx.beginPath(); ctx.moveTo(circleX- R, circleY); ctx.lineTo(circleX+R, circleY); ctx.stroke();
+    ctx.restore();
+  }
 
   function drawDot(ix,iy,color,glow){ ctx.save(); const isDark=document.body.classList.contains('dark-mode'); ctx.fillStyle=isDark?glow:color; ctx.beginPath(); ctx.arc(ix,iy,6.4,0,Math.PI*2); ctx.fill(); ctx.strokeStyle=isDark?'#0b1020':'#fff'; ctx.lineWidth=2; ctx.stroke(); ctx.globalAlpha=0.22; ctx.fillStyle=glow; ctx.beginPath(); ctx.arc(ix,iy,13,0,Math.PI*2); ctx.fill(); ctx.restore(); }
   function drawGreenDot(ix,iy){ drawDot(ix,iy,'#166534','#4ade80'); }
@@ -1029,8 +1086,27 @@ footer a:hover{color:var(--accent)}
     if(showSine){ const wh=drawWave(cur); drawConnector(rx,ry,wh.wx,wh.wy); }
     if(showSquare){ const sq=computeSquareIntersection(ca,sa); const gh=drawGreenWave(cur); drawGreenDot(sq.x,sq.y); drawColorConnector(sq.x,sq.y,gh.gx,gh.gy,'#16a34a'); }
     if(showTriangle){ const tr=computeTriangleIntersection(ca,sa); const oh=drawOrangeWave(cur); drawOrangeDot(tr.x,tr.y); drawColorConnector(tr.x,tr.y,oh.gx,oh.gy,'#c2410c'); }
-    if(showSquareWave){ const y=squareWaveValue(cur); const ix=circleX+ca*R, iy=circleY - y; const ph=drawSquareWave(cur); drawPurpleDot(ix,iy); drawColorConnector(ix,iy,ph.gx,ph.gy,'#7c3aed'); }
-    if(showSawtooth){ const y=sawtoothValue(cur); const ix=circleX+ca*R, iy=circleY - y; const rh=drawSawtoothWave(cur); drawRedDot(ix,iy); drawColorConnector(ix,iy,rh.gx,rh.gy,'#dc2626'); }
+    if(showSquareWave){
+      const sqw = computeSquareWaveIntersection(ca,sa);
+      const ph=drawSquareWave(cur);
+      if(sqw){
+        drawPurpleDot(sqw.x,sqw.y);
+        drawColorConnector(sqw.x,sqw.y,ph.gx,ph.gy,'#7c3aed');
+      } else {
+        // near sin=0, dot at infinity — just show wave head, no dot to avoid jump
+        // still draw faint connector from circle edge to wave
+        const edgeX = circleX + ca*R, edgeY = circleY - (sa>=0? R/Math.SQRT2 : -R/Math.SQRT2);
+        drawColorConnector(edgeX, edgeY, ph.gx, ph.gy, '#7c3aed');
+      }
+    }
+    if(showSawtooth){
+      const saw = computeSawtoothIntersection(ca,sa,cur);
+      const rh=drawSawtoothWave(cur);
+      if(saw){
+        drawRedDot(saw.x,saw.y);
+        drawColorConnector(saw.x,saw.y,rh.gx,rh.gy,'#dc2626');
+      }
+    }
     if(showEllipse){ const el=computeEllipseIntersection(ca,sa); const eh=drawEllipseWave(cur); drawTealDot(el.x,el.y); drawColorConnector(el.x,el.y,eh.gx,eh.gy,'#0d9488'); }
     updateReadouts(cur,sa,ca);
   }
